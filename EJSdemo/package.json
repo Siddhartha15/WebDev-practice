@@ -1,0 +1,16 @@
+{
+  "name": "postrequests",
+  "version": "1.0.0",
+  "description": "Demo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Siddhartha M",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}
