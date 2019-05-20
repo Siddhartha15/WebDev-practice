@@ -1,8 +1,8 @@
 # WEB DEV PRACTICE using Cloud9 IDE #
 
-## Running the server on Cloud9 IDE
+### Running the server on Cloud9
 
-
+#####   Run `npm install` To install all dependencies from a package.json file
 
 1) Open `server.js` or `app.js` or `index.js` and start the app by clicking on the "Run" button in the top menu.
 
@@ -17,8 +17,7 @@ Once the server is running, open the project in the shape of 'https://projectnam
 > You should now have mongo 3.6.2 or newer, you can double check with `mongo --version`
 >
 > Now type `cd` in the terminal and hit enter to go into the root directory `~`
->
- Enter the following:
+Enter the following:
      
      mkdir data
      echo "mongod --dbpath=data --nojournal" > mongod
@@ -26,4 +25,4 @@ Once the server is running, open the project in the shape of 'https://projectnam
 > Now, in order to run mongod you'll first need to cd into root `~` then run `./mongod` 
 
 
-### Cloud9 projects or workspace should be migrated to AWS Cloud9 (Amazon acquired Cloud9)
+#### Cloud9 projects or workspace should be migrated to AWS Cloud9 (since Amazon acquired Cloud9)
