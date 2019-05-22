@@ -1,35 +1,11 @@
 var mongoose = require("mongoose");
+var postModel=require("./models/post");
+var userModel=require("./models/user");
 
- mongoose.connect("mongodb://localhost:27017/blog_demo_2",{ useNewUrlParser: true });
- 
- // Schema ===================================================================================
- 
-  //POST SCHEMA - title,content
- var postSchema = new mongoose.Schema({
-    title:String,
-    content:String
- });
- 
- var postModel = mongoose.model("Post",postSchema);
- 
- 
- //USER SCHEMA - email,name
- var userSchema = new mongoose.Schema({
-     email:String,
-     name : String,
-     posts : [
-         {
-            type :mongoose.Schema.Types.ObjectId,
-            ref:"Post"
-         }
-     ]
- }) ;
- 
- var userModel = mongoose.model("User",userSchema);
+
+mongoose.connect("mongodb://localhost:27017/blog_demo_2",{ useNewUrlParser: true });
  
 
- //============================================================================================
- 
 //  postModel.create({
 //      title:"hello wdwd -4",
 //      content:"asdhanos asodsancoasc caochascaocl zxcsd"
