@@ -2,24 +2,101 @@ var express     = require("express"),
     app         = express(),
     bodyparser  = require("body-parser"),
     mongoose    = require("mongoose"),
+    passport    = require("passport"),
+    LocalStrategy = require("passport-local"),
     Campground  = require("./models/campground"),
     Comment     = require("./models/comment"),
+    User        = require("./models/user"),
     seedDB      = require("./seeds"); 
+    
+
 // extras start here
 app.use(bodyparser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
 // extras end here
 
+// Passport Config --- Authentication setup -------------------
+app.use(require("express-session")({
+    secret: "ka7hw%BDdhwi*%$dw96dd0%g936bc9^dwi39&hf0BDJE^(Dndhd7DRB02e8)Ndow937jr03rjfsooosf030jf3*03h20^$dwj9",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// Auth setup ends -------------------------------------------
+
+// passing current user to all routes by this middleware ----
+app.use(function(req,res,next){
+    res.locals.currentUser=req.user;
+    next();
+})
+//-----
+
 seedDB();
 
 
 // DataBase config
-mongoose.connect('mongodb://localhost:27017/yelp_camp_v3', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/yelp_camp_v6', { useNewUrlParser: true });
 // Data Base config ends here
 
 
+// Auth Routes
 
+//show sign up form
+app.get("/register", function(req, res){
+  res.render("register"); 
+});
+// handling user sign up
+app.post("/register", function(req, res){
+    
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render('register');
+        }
+        passport.authenticate("local")(req, res, function(){
+          res.redirect("/campgrounds");
+        });
+    });
+});
+
+// LOGIN ROUTES
+
+//render login form
+app.get("/login", function(req, res){
+  res.render("login"); 
+});
+
+//login logic
+//middleware
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/campgrounds",
+    failureRedirect: "/login"
+}) ,function(req, res){
+});
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/campgrounds");
+});
+
+// auth middleware
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated())
+    {
+        return next();
+    }
+    
+    res.redirect("/login");
+}
 
 // routes start here ============================================
 
@@ -30,6 +107,7 @@ app.get("/",function(req,res){
 //INDEX - Show all campgrounds
 app.get("/campgrounds",(req,res)=>{
     
+    // var currentUser = req.user;
     // get all campgrounds from DB
     Campground.find({},(err,allcampgrounds)=>{
         if(err)
@@ -95,7 +173,7 @@ app.get("/campgrounds/:id",(req,res)=>{
 // Comments Routes ---------------------
 
  // New - show form to add comments under a particlar campground with associated ID
-app.get("/campgrounds/:id/comments/new",(req,res)=>{
+app.get("/campgrounds/:id/comments/new",isLoggedIn,(req,res)=>{
     
     Campground.findById(req.params.id,(err,foundCampground)=>{
         if(err)
@@ -111,7 +189,7 @@ app.get("/campgrounds/:id/comments/new",(req,res)=>{
 });
 
 // CREATE - add new comment under particular campground
-app.post("/campgrounds/:id/comments",(req,res)=>{
+app.post("/campgrounds/:id/comments",isLoggedIn,(req,res)=>{
    //lookup for a campground using the id
    Campground.findById(req.params.id,(err,campground)=>{
       if(err){
