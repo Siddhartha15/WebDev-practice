@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
+var middlewareObj=require("../middleware/index");
+
+
 
 //INDEX - Show all campgrounds
 router.get("/campgrounds",(req,res)=>{
@@ -21,7 +24,7 @@ router.get("/campgrounds",(req,res)=>{
 });
 
 // CREATE - add new campground to DB
-router.post("/campgrounds",isLoggedIn,(req,res)=>{
+router.post("/campgrounds",middlewareObj.isLoggedIn,(req,res)=>{
 
     // get data from form and add it to campgrounds array
    var name=req.body.name;
@@ -50,7 +53,7 @@ router.post("/campgrounds",isLoggedIn,(req,res)=>{
 });
 
 // NEW - Show form to add new campground
-router.get("/campgrounds/new",isLoggedIn,(req,res)=>{
+router.get("/campgrounds/new",middlewareObj.isLoggedIn,(req,res)=>{
     res.render("campgrounds/new");    
 });
 
@@ -74,7 +77,7 @@ router.get("/campgrounds/:id",(req,res)=>{
 });
 
 //EDIT - edit the campground...
-router.get("/campgrounds/:id/edit",(req,res)=>{
+router.get("/campgrounds/:id/edit",middlewareObj.checkCampgroundOwnership,(req,res)=>{
     
     Campground.findById(req.params.id,(err,foundCampground)=>{
         if(err){
@@ -85,8 +88,9 @@ router.get("/campgrounds/:id/edit",(req,res)=>{
     })    
 
 });
+
 //UPDATE - update the campground....
-router.put("/campgrounds/:id",(req,res)=>{
+router.put("/campgrounds/:id",middlewareObj.checkCampgroundOwnership,(req,res)=>{
     Campground.findByIdAndUpdate(req.params.id,req.body.campground,(err,updatedCampground)=>{
        if(err)
        {
@@ -98,9 +102,10 @@ router.put("/campgrounds/:id",(req,res)=>{
        }
     });
 });
-//DELETE - delete the campground
-router.delete("/campgrounds/:id",(req,res)=>{
-    
+
+//DELETE - delete the campground and also the comments associated with...
+router.delete("/campgrounds/:id",middlewareObj.checkCampgroundOwnership,(req,res)=>{
+    // remove all campgrounds    
    Campground.findByIdAndRemove(req.params.id,(err)=>{
        if(err){
            console.log(err);
@@ -108,19 +113,8 @@ router.delete("/campgrounds/:id",(req,res)=>{
         console.log("Deleted the campground");
         res.redirect("/campgrounds");
    }) 
+   // remove all comments associated with campground.. TBD-----
 });
-
-
-//auth midlleware
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated())
-    {
-        return next();
-    }
-    
-    res.redirect("/login");
-}
-
 
 
 module.exports=router;

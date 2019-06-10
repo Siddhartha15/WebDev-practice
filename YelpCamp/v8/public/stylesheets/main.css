@@ -5,7 +5,6 @@
 .thumbnail .caption-full {
     padding: 9px;
 }
-
-#delete-campground{
+.delete-form-btn{
     display: inline;
 }
