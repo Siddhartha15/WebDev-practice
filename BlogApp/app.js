@@ -3,8 +3,9 @@ var express = require("express"),
     bodyparser = require("body-parser"),
     expressSanitizer = require("express-sanitizer"), // sanitizer is used remove scripts while updating and creating blogs
     mongoose = require("mongoose"),
+    //html forms doesnt support put and delete requests..
+    //for making http put and delete requests...
     methodOverride = require("method-override");
-
  // app config 
  mongoose.connect("mongodb://localhost:27017/myblog_db",{ useNewUrlParser: true });
  
@@ -12,7 +13,7 @@ var express = require("express"),
  app.use(bodyparser.urlencoded({extended: true}));
  app.use(expressSanitizer()); // this shld be after body parser is used ...//
  app.use(express.static("public"));
- app.use(methodOverride("_method"));
+ app.use(methodOverride("_method")); //
  
  
  // blog schema
