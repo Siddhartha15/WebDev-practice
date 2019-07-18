@@ -3,6 +3,7 @@ var mongoose    = require("mongoose");
 // Data Base schema 
 var campgroundSchema = mongoose.Schema({
     name: String,
+    price:String,
     image:String,
     description:String,
     author:{

@@ -28,13 +28,14 @@ router.post("/campgrounds",middlewareObj.isLoggedIn,(req,res)=>{
 
     // get data from form and add it to campgrounds array
    var name=req.body.name;
+   var price=req.body.price;
    var imageurl = req.body.image;
    var desc = req.body.description;
    var author={
        id:req.user._id,
        username:req.user.username
    };
-   var newCampground = {name:name, image:imageurl, description:desc,author:author};
+   var newCampground = {name:name,price:price, image:imageurl, description:desc,author:author};
    
    // put newCampground into DB
    Campground.create(newCampground,(err,campground)=>{

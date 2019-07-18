@@ -55,7 +55,9 @@ app.use(function(req,res,next){
 
 // DataBase config
 mongoose.connect('mongodb://localhost:27017/yelp_camp_v8', { useNewUrlParser: true });
-
+mongoose.connection.once('open',()=>{
+	console.log("connection Made");
+});
 // routes
 app.use(indexRoutes);
 app.use(campgroundRoutes);
@@ -63,6 +65,7 @@ app.use(commentRoutes);
 
 
 // server setup
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(process.env.PORT||3000,process.env.IP,function(){
     console.log("Yelp camp Server started");
+    // console.log(process.env.PORT);
 });
