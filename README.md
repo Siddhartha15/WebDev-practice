@@ -8,7 +8,7 @@
 
 2) Alternatively you can launch the app from the Terminal:
 
-    $ node app.js
+    ~$ node app.js
 
 Once the server is running, open the project in the shape of 'https://projectname-username.c9users.io/'. As you enter your name, watch the Users list (on the left) update. Once you press Enter or Send, the message is shared with all connected clients.
 
@@ -19,9 +19,9 @@ Once the server is running, open the project in the shape of 'https://projectnam
 > Now type `cd` in the terminal and hit enter to go into the root directory `~`
 Enter the following:
      
-     mkdir data
-     echo "mongod --dbpath=data --nojournal" > mongod
-     chmod a+x mongod
+     ~$ mkdir data
+     ~$ echo "mongod --dbpath=data --nojournal" > mongod
+     ~$ chmod a+x mongod
 > Now, in order to run mongod you'll first need to cd into root `~` then run `./mongod` 
 
 
