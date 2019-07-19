@@ -25,4 +25,4 @@ Enter the following:
 > Now, in order to run mongod you'll first need to cd into root `~` then run `./mongod` 
 
 
-#### Cloud9 projects or workspace should be migrated to AWS Cloud9 (since Amazon acquired Cloud9)
+#### Cloud9 projects or workspace migrated to AWS Cloud9 (since Amazon acquired Cloud9)
